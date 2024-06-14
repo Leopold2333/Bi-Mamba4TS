@@ -60,13 +60,13 @@ conda activate your_env_name
 pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
 conda install packaging
 cd causal-conv1d;CAUSAL_CONV1D_FORCE_BUILD=TRUE pip install .;cd ..
-cd mamba;MAMBA_FORCE_BUILD=TRUE pip install .;cd ..
+cd mamba_plus;MAMBA_FORCE_BUILD=TRUE pip install .;cd ..
 ```
 These python package installing tips is work up to now (04.24 2024).
 
-I strongly recommand doing all these on **Linux**! The default cuda version should be at least 11.8 (or 11.6? seems that new versions allow for lower cuda versions)
+I strongly recommand doing all these on **Linux**, or, WSL2 on Windows! The default cuda version should be at least 11.8 (or 11.6? seems that new versions allow for lower cuda versions).
 
-The tips listed here will force local compilation of causal-conv1d and mamba_plus. The mamba_plus here is the modified hardware-aware parallel computing algorithm of our proposed **Mamba+**. If you want to run S-Mamba or else Mamba-based models, just go with `cd mamba;pip install .` or `pip install mamba-ssm` in your python environment to download the original mamba_ssm of **Mamba**.
+The tips listed here will force local compilation of causal-conv1d and mamba_plus. The mamba_plus here is the modified hardware-aware parallel computing algorithm of our proposed **Mamba+**. If you want to run S-Mamba or else Mamba-based models, just go with `cd mamba;pip install .` or `pip install mamba-ssm` in a new python environment to download the original mamba_ssm of **Mamba**. Please use different python environments for `mamba_plus` and `mamba_ssm`, because the `selective_scan` program may be covered by one of them.
 
 Take cuda 11.8 as an example, there should be a directory named 'cuda-11.8' in `/usr/local`. You should make sure that cuda exists in the path. Take `bash` as an example. Run `vi ~/.bashrc` and make sure the following paths exist:
 ```bash
