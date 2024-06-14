@@ -1,0 +1,17 @@
+.vscode
+/data
+/checkpoints
+/results
+/results_old
+/logs
+/predictions
+/layers/Graph.py
+
+**/__pycache__/
+
+draw_hot_map.py
+test.py
+predict.py
+
+*.log
+*.pdf
