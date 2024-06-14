@@ -80,7 +80,7 @@ Of course, if you do not want to force local compilation, these paths are not ne
 2. Run the script: Find the model you want to run in `/scripts` and choose the dataset you want to use. 
 > Run `./scripts/{model}/{dataset}.sh` to start training.
 
-# Datasets
+# Datasets🔗
 We have compiled the datasets we need to use and provide download link: [data.zip](https://drive.google.com/file/d/1krbMHQXB-aV9vvYs2bRsJnXPLa4BKxzG/view?usp=drive_link).
 
 # Acknowledgements🙏
