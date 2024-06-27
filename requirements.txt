@@ -1,6 +1,5 @@
 causal-conv1d==1.2.0.post2
 einops==0.7.0
-mamba-ssm==1.2.0.post1
 matplotlib==3.7.5
 numpy==1.24.1
 nvidia-ml-py==12.535.133
