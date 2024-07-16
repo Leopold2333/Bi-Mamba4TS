@@ -37,7 +37,7 @@ All datasets are widely used and are publicly available at [https://github.com/z
 
 ## Main Results
 
-Copared to [iTransformer](https://openreview.net/forum?id=JePfAI8fah), the current SOTA Transformer-based model, the MSE results of Bi-Mamba+ are reduced by 4.72% and the MAE results are reduced by 2.69% on average.
+Compared to [iTransformer](https://openreview.net/forum?id=JePfAI8fah), the current SOTA Transformer-based model, the MSE results of Bi-Mamba+ are reduced by 4.76% and the MAE results are reduced by 2.68% on average. The improvement comes to 3.77% and 2.74% compared to [S-Mamba](https://arxiv.org/abs/2403.11144).
 
 ![main results](pics/main-result.png "main results")
 
