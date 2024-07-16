@@ -40,12 +40,11 @@ class EncoderLayer(nn.Module):
         output_forward = self.addnorm_for(output_forward, x)
 
         if self.bi_dir:
-            x = x.flip(dims=[1])
-            output_backward = self.mamba_backward(x)
-            output_backward = self.addnorm_back(output_backward, x).flip(dims=[1])
+            output_backward = self.mamba_backward(x.flip(dims=[1])).flip(dims=[1])
+            output_backward = self.addnorm_back(output_backward, x)
             output = output_forward + output_backward
         else:
-            output = output_forward
+            output = self.addnorm_for(output_forward, x)
         temp = output
         output = self.ffn(output.transpose(-1, 1)).transpose(-1, 1)
         output = self.addnorm_ffn(output, temp)

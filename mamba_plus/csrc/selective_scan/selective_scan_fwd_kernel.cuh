@@ -123,11 +123,6 @@ void selective_scan_fwd_kernel(SSMParamsBase params) {
         }
     }
 
-    // for (int state_idx = threadIdx.x; state_idx < params.dstate; state_idx += blockDim.x) {
-    //     smem_a[state_idx] = A[state_idx * params.A_dstate_stride];
-    //     smem_bc[state_idx] = B[state_idx * params.B_dstate_stride] * C[state_idx * params.C_dstate_stride];
-    // }
-
     constexpr int kChunkSize = kNThreads * kNItems;
     for (int chunk = 0; chunk < params.n_chunks; ++chunk) {
         input_t u_vals[kNRows][kNItems], delta_vals_load[kNRows][kNItems];
@@ -144,7 +139,7 @@ void selective_scan_fwd_kernel(SSMParamsBase params) {
         u += kChunkSize;
         delta += kChunkSize;
 
-        float delta_vals[kNRows][kNItems], delta_u_vals[kNRows][kNItems], out_vals[kNRows][kNItems];
+        float delta_vals[kNRows][kNItems], delta_u_vals[kNRows][kNItems], out_vals[kNRows][kNItems], skip_vals[kNRows][kNItems];
         #pragma unroll
         for (int r = 0; r < kNRows; ++r) {
             #pragma unroll
@@ -155,7 +150,8 @@ void selective_scan_fwd_kernel(SSMParamsBase params) {
                     delta_vals[r][i] = delta_vals[r][i] <= 20.f ? log1pf(expf(delta_vals[r][i])) : delta_vals[r][i];
                 }
                 delta_u_vals[r][i] = delta_vals[r][i] * u_val;
-                out_vals[r][i] = D_val[r] * u_val;
+                out_vals[r][i] = 0.0;
+                skip_vals[r][i] = D_val[r] * u_val;
             }
         }
 
@@ -291,11 +287,11 @@ void selective_scan_fwd_kernel(SSMParamsBase params) {
                 for (int i = 0; i < kNItems; ++i) {
                     float z_val = z_vals[i];
                     float out_val = float(out_vals[r][i]);
-                    float u_val = float(u_vals[r][i]);
+                    float skip_val = float(skip_vals[r][i]);
                     float gate1 = 1 / (1 + expf(-z_val));
                     float gate2 = 1 - gate1;
                     // out_vals[r][i] *= z_val / (1 + expf(-z_val));
-                    out_vals[r][i] = out_val * z_val * gate1 + u_val * gate2;
+                    out_vals[r][i] = (out_val * z_val * gate1) + (skip_val * gate2);
                 }
                 __syncthreads();
                 store_output<Ktraits>(out_z + r * params.out_z_d_stride, out_vals[r], smem_store, params.seqlen - chunk * kChunkSize);
@@ -306,7 +302,7 @@ void selective_scan_fwd_kernel(SSMParamsBase params) {
         Cvar += kChunkSize * (!kIsComplex ? 1 : 2);
     }
 }
-
+// for historical length 96, kNThreads=32 and kNItems=4
 template<int kNThreads, int kNItems, typename input_t, typename weight_t>
 void selective_scan_fwd_launch(SSMParamsBase &params, cudaStream_t stream) {
     // Only kNRows == 1 is tested for now, which ofc doesn't differ from previously when we had each block

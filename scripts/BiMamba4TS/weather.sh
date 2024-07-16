@@ -1,4 +1,5 @@
-work_space="/home/Bi-Mamba4TS/main.py"
+project_path=$(pwd)
+work_space="$project_path/main.py"
 # model params
 model="BiMamba4TS"
 seq_len=96
@@ -30,12 +31,11 @@ bi_dir=1
 embed_type=2
 dropout=0.1
 
-for patch_len in 4
+for dropout in 0.1 0.2
 do
-stride=$(echo "$patch_len / 2" | bc)
-for pred_len in 96
+for pred_len in 96 192 336 720
 do
-    for random_seed in 2023
+    for random_seed in 2024
     do
         log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_dp${dropout}_el${e_layers}_em${embed_type}_c${ch_ind}_r${residual}_b${bi_dir}.log"
         python $work_space $model --is_training=1 --gpu=$gpu \

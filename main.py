@@ -12,7 +12,7 @@ from utils.model_params import model_parser_dict
 from utils.dataloader import load_data
 from trainer.long_term_forecasting import LTF_Trainer
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
 
 def objective(trial, args):
     """
@@ -33,7 +33,7 @@ def objective(trial, args):
 
     # parameters settings
     args.learning_rate = trial.suggest_float("learning_rate", 0.0001, 0.0016, step=0.00007)
-    # args.dropout = trial.suggest_float("dropout", 0.2, 0.4, step=0.05)
+    args.dropout = trial.suggest_float("dropout", 0.2, 0.4, step=0.05)
     # args.d_conv = trial.suggest_int("d_conv", 1, 4,step=1)
     # args.d_state = trial.suggest_int("d_state", 1, 32, step=1)
 
@@ -51,18 +51,13 @@ def objective(trial, args):
     else:
         GCN = ''
 
-    if hasattr(args, "rnn") and args.rnn!=0:
-        RNN = f'_rnn({args.rnn}+{args.r_layers})'
-    else:
-        RNN = ''
     
-    task = '{}({})_{}_{}{}{}_loss({})'.format(
+    task = '{}({})_{}_{}{}_loss({})'.format(
         args.dataset_name,          # dataset
         args.task,
         args.seq_len,               # look-back window size
         args.pred_len,              # prediction horizons
         GCN,
-        RNN,
         args.loss
     )
 
@@ -122,18 +117,21 @@ if __name__ == '__main__':
         args.device='cpu'
 
     search_space = {
-        # "learning_rate": [1e-4, 2e-4],
-        "learning_rate": [5e-5, 1e-4, 2e-4, 5e-4],
-        # 'dropout': [0.05, 0.1, 0.15, 0.25],
-        # 'd_conv': [2,3,4]
-        # 'd_state': [2,4,8,16,32]
+        "weather": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5, 1e-3]},
+        "traffic": {"learning_rate": [2.4e-3, 1e-3, 1.4e-3, 2e-3]},
+        "electricity": {"learning_rate": [8e-4, 4e-4, 1e-3, 2e-4]},
+        "solar": {"learning_rate": [8e-4, 4e-4, 1e-3, 2e-3]},
+        "ETTh1": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
+        "ETTh2": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
+        "ETTm1": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
+        "ETTm2": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
     }
 
     # study = optuna.create_study(direction='minimize')
-    study = optuna.create_study(direction='minimize', sampler=optuna.samplers.GridSampler(search_space))
+    study = optuna.create_study(direction='minimize', sampler=optuna.samplers.GridSampler(search_space[args.dataset_name]))
     # bind 'args' to 'objective' function
     objective_with_args = lambda trial: objective(trial, args)
-    study.optimize(objective_with_args, n_trials=4)
+    study.optimize(objective_with_args, n_trials=12)
     # print the best parameters and metrics
     print('Best parameters:', study.best_params)
     print('Best score:', study.best_value)

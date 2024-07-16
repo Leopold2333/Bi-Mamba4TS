@@ -166,6 +166,14 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
             if constexpr (kDeltaSoftplus) {
                 delta_vals[i] = delta_vals[i] <= 20.f ? log1pf(expf(delta_vals[i])) : delta_vals[i];
             }
+            // if (threadIdx.x * kNItems + i < params.seqlen - chunk * kChunkSize) {
+            //       delta_vals[i] = float(delta_vals_load[i]) + delta_bias;
+            //       if constexpr (kDeltaSoftplus) {
+            //          delta_vals[i] = delta_vals[i] <= 20.f ? log1pf(expf(delta_vals[i])) : delta_vals[i];
+            //      }
+            // } else {
+            //      delta_vals[i] = 0.f;
+            // }
         }
 
         if constexpr (kHasZ) {
@@ -186,9 +194,12 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
                 float z_val = z_vals[i];
                 float z_sigmoid_val = 1.0f / (1.0f + expf(-z_val));
                 z_silu_vals[i] = z_val * z_sigmoid_val;
+                // dz_vals[i] = dout_vals[i] * float(out_vals[i]) * z_sigmoid_val
+                //              * (1.0f + z_val * (1.0f - z_sigmoid_val));
                 dz_vals[i] = dout_vals[i] * float(out_vals[i]) * z_sigmoid_val * (1.0f + z_val * (1.0f - z_sigmoid_val));
-                dz_vals[i] -= dout_vals[i] * u_vals[i] * z_sigmoid_val * (1.0f - z_sigmoid_val);
+                dz_vals[i] -= dout_vals[i] * float(u_vals[i]) * D_val * z_sigmoid_val * (1.0f - z_sigmoid_val);
                 du_vals[i] = dout_vals[i] * (1.0f - z_sigmoid_val);
+                dD_val += dout_vals[i] * float(u_vals[i]) * (1.0f - z_sigmoid_val);
                 dout_vals[i] *= z_silu_vals[i];
             }
             __syncthreads();
@@ -207,15 +218,11 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
             }
         }
 
-        #pragma unroll
-        if constexpr (kHasZ) {
-            for (int i = 0; i < kNItems; ++i) { du_vals[i] += D_val * dout_vals[i]; }
-        }
-        else {
-            for (int i = 0; i < kNItems; ++i) { du_vals[i] = D_val * dout_vals[i]; }
-        }
-        #pragma unroll
-        for (int i = 0; i < kNItems; ++i) { dD_val += dout_vals[i] * float(u_vals[i]); }
+        // float du_vals[kNItems];
+        // #pragma unroll
+        // for (int i = 0; i < kNItems; ++i) { du_vals[i] = D_val * dout_vals[i]; }
+        // #pragma unroll
+        // for (int i = 0; i < kNItems; ++i) { dD_val += dout_vals[i] * float(u_vals[i]); }
 
         float ddelta_vals[kNItems] = {0};
         __syncthreads();

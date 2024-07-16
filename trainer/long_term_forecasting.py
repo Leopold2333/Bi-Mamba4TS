@@ -233,6 +233,7 @@ class LTF_Trainer():
         self.model.eval()
         preds = []
         trues = []
+        mse_list, rmse_list, mae_list, mape_list = [], [], [], []
         with torch.no_grad():
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(test_loader):
                 batch_x = batch_x.float().to(self.args.device)
@@ -253,15 +254,20 @@ class LTF_Trainer():
                 outputs = outputs[:, -self.args.pred_len:, f_dim:]
                 batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.args.device)
 
-                preds.append(outputs.detach().cpu())
-                trues.append(batch_y.detach().cpu())
-
-        preds = torch.cat(preds, dim=0)
-        trues = torch.cat(trues, dim=0)
+                preds = outputs.detach().cpu()
+                trues = batch_y.detach().cpu()
+                mse, rmse, mae, mape = get_loss(preds, trues)
+                mse_list.append(float(mse))
+                rmse_list.append(float(rmse))
+                mae_list.append(float(mae))
+                mape_list.append(float(mape))
+        
+        mse, rmse, mae, mape = np.average(mse_list), \
+                            np.average(rmse_list), \
+                            np.average(mae_list), \
+                            np.average(mape_list)
 
         result_path = os.path.join(self.r_path, "result.txt")
-        
-        mse, rmse, mae, mape = get_loss(preds, trues)
         print('mse:{:.6f}, mae:{:.6f}, rmse:{:.6f}, mape:{:.6f}'.format(mse, mae, rmse, mape))
         f = open(result_path, 'a')
         f.write(self.setting + "\n")

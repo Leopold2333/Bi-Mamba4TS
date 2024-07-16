@@ -6,7 +6,7 @@
 /logs
 /predictions
 /layers/Graph.py
-
+/scripts
 **/__pycache__/
 
 draw_hot_map.py

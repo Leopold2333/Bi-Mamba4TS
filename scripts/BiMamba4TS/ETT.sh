@@ -1,22 +1,30 @@
-work_space="/mnt/data/lab/Bi-Mamba4TS/main.py"
+project_path=$(pwd)
+work_space="$project_path/main.py"
 # model params
 model="BiMamba4TS"
 seq_len=96
 loss="mse"
-
-e_layers=2
+random_seed=2024
+e_layers=3
+patch_len=4
+stride=2
 
 d_model=64
 d_ff=128
-d_state=8
+d_state=2
 batch_size=32
-gpu=1
+gpu=0
+
+ch_ind=1
+residual=1
+bi_dir=1
+
 # dataset
-for patch_len in 8 12 24 48
+for patch_len in 4 12 24
 do
     stride=$(echo "$patch_len / 2" | bc)
-    # for dataset_name in "ETTh1" "ETTh2"
-    for dataset_name in "ETTh1"
+    for dataset_name in "ETTh2" "ETTm2"
+    # for dataset_name in "ETTh1" "ETTm1"
     do
         if [ "$dataset_name" = "ETTh1" ] || [ "$dataset_name" = "ETTh2" ]; then
             root_path=data/ETT-small
@@ -29,14 +37,11 @@ do
             dataset_type=ETTm1
             enc_in=7
         fi
-        ch_ind=1
-        residual=1
-        bi_dir=1
-        for pred_len in 96 192 336 720
+        for e_layers in 1 2
         do
-            for random_seed in 2022
+            for pred_len in 96 192 336 720
             do
-                log_file="${random_seed}_${dataset_name}_${model}(${seq_len}-${pred_len})(${patch_len}-${stride})_el${e_layers}_ch${ch_ind}_res${residual}_bi${bi_dir}.log"
+                log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_el${e_layers}_c${ch_ind}_r${residual}_b${bi_dir}.log"
                 python $work_space $model \
                 --gpu=$gpu \
                 --embed_type=0 --num_workers=8 --seed=$random_seed --batch_size=$batch_size \

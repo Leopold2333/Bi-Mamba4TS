@@ -4,7 +4,9 @@ import numpy as np
 from layers.BiMamba4TS_layers import Encoder, EncoderLayer
 from layers.Embed import PatchEmbedding, TruncateModule
 from einops import rearrange
+# from mamba_ssm import Mamba
 from mamba_plus import Mamba
+# from layers.Attention import AttentionLayer, FullAttention
 
 
 class Model(nn.Module):
@@ -45,16 +47,18 @@ class Model(nn.Module):
                 EncoderLayer(
                     Mamba(d_model=configs.d_model, 
                         #   batch_size=configs.batch_size,
+                        #   seq_len=self.patch_num,
                           d_state=configs.d_state, 
                           d_conv=configs.d_conv, 
                           expand=configs.e_fact,
-                          use_fast_path=False),
+                          use_fast_path=True),
                     Mamba(d_model=configs.d_model, 
                         #   batch_size=configs.batch_size,
+                        #   seq_len=self.patch_num,
                           d_state=configs.d_state, 
                           d_conv=configs.d_conv, 
                           expand=configs.e_fact,
-                          use_fast_path=False),
+                          use_fast_path=True),
                     configs.d_model,
                     configs.d_ff,
                     dropout=configs.dropout,
@@ -147,5 +151,5 @@ class Flatten_Head(nn.Module):
         else:
             x = self.flatten(x)                     # x: [B, C, D * N]
             x = self.linear(x)                      # x: [B, C, H]
-            x = self.dropout(x)
+            # x = self.dropout(x)
         return x
