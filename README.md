@@ -47,6 +47,14 @@ We calculate the average MSE and MAE results of (i) without SRA decider (w/o SRA
 
 ![ablation](pics/ablation.png "ablation")
 
+## Model Efficiency
+
+We conduct the following experiments to comprehensively evaluate the model efficiency from (a) predicting accuracy, (b) memory usage and (c) training speed. We set $L=96,H=96$ as the forecasting task and use $Batch=32$ for ETTh1 and Traffic. Bi-Mamba+ strikes a good balance among predicting performance, training speed and memory usage.
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="pics/efficiency-ETTh1.png" alt="ETTh1" style="width: 49%;">
+  <img src="pics/efficiency-traffic.png" alt="Traffic" style="width: 49%;">
+</div>
 
 # Getting Start🛫
 
