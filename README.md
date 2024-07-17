@@ -39,13 +39,13 @@ All datasets are widely used and are publicly available at [https://github.com/z
 
 Compared to [iTransformer](https://openreview.net/forum?id=JePfAI8fah), the current SOTA Transformer-based model, the MSE results of Bi-Mamba+ are reduced by 4.85% and the MAE results are reduced by 2.70% on average. The improvement comes to 3.85% and 2.75% compared to [S-Mamba](https://arxiv.org/abs/2403.11144).
 
-![main results](pics/main.png "main results")
+![main results](pics/full-main.png "main results")
 
 ## Ablation Study
 
 We calculate the average MSE and MAE results of (i) without SRA decider (w/o SRA-I & w/o SRA-M); (ii) without bidirectional design (w/o Bi); (iii) replacing Mamba+ with Mamba (Bi-Mamba), (iv) without residual connection (w/o Residual); (v) S-Mamba and (vi) PatchTST. The SRA decider, added forget gate, bidirectional and residual design are all valid.
 
-![ablation](pics/ablation.png "ablation")
+![ablation](pics/full-ablation.png "ablation")
 
 ## Model Efficiency
 
