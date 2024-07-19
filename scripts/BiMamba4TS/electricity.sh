@@ -1,12 +1,12 @@
-work_space="/mnt/data/lab/Bi-Mamba4TS/main.py"
+project_path=$(pwd)
+work_space="$project_path/main.py"
 # model params
-gpu=1
 model="BiMamba4TS"
 seq_len=96
 loss="mse"
 patch_len=24
 stride=12
-
+random_seed=2024
 e_layers=3
 
 d_model=128
@@ -16,70 +16,45 @@ batch_size=32
 
 # dataset
 dataset_name="electricity"
+root_path=data/electricity
+data_path="${dataset_name}.csv"
+dataset_type=custom
+enc_in=321
 
-if [ "$dataset_name" = "weather" ]; then
-    root_path=data/weather
-    data_path="${dataset_name}.csv"
-    dataset_type=custom
-    enc_in=21
-elif [ "$dataset_name" = "electricity" ]; then
-    root_path=data/electricity
-    data_path="${dataset_name}.csv"
-    dataset_type=custom
-    enc_in=321
-elif [ "$dataset_name" = "traffic" ]; then
-    root_path=data/traffic
-    data_path="${dataset_name}.csv"
-    dataset_type=custom
-    enc_in=862
-elif [ "$dataset_name" = "ETTh1" ] || [ "$dataset_name" = "ETTh2" ]; then
-    root_path=data/ETT-small
-    data_path="${dataset_name}.csv"
-    dataset_type=ETTh1
-    enc_in=7
-elif [ "$dataset_name" = "ETTm1" ] || [ "$dataset_name" = "ETTm2" ]; then
-    root_path=data/ETT-small
-    data_path="${dataset_name}.csv"
-    dataset_type=ETTm1
-    enc_in=7
-elif [ "$dataset_name" = "ILI" ]; then
-    root_path=data/illness
-    data_path="national_illness.csv"
-    dataset_type=custom
-    enc_in=7
-fi
-
+gpu=0
 ch_ind=0
 residual=1
 bi_dir=1
 embed_type=0
 
-for seq_len in 96
-# for patch_len in 48
+lr="1e-4"
+dropout=0.1
+
+is_training=$1
+
+for pred_len in 96 192 336 720
 do
-patch_len=$(echo "$seq_len / 4" | bc)
-stride=$(echo "$patch_len / 2" | bc)
-for pred_len in 96
-do
-    for random_seed in 2023
-    do
-        log_file="${dataset_name}(${random_seed})_${model}(${seq_len}-${pred_len})(${patch_len}-${stride})_el${e_layers}_em${emb_type}_ch${ch_ind}_res${residual}_bi${bi_dir}.log"
-        python $work_space $model --is_training=-1 \
-        --gpu=$gpu \
-        --embed_type=$embed_type --num_workers=4 --seed=$random_seed --batch_size=$batch_size \
-        --seq_len=$seq_len --pred_len=$pred_len \
-        --patch_len=$patch_len --stride=$stride --ch_ind=$ch_ind --residual=$residual --bi_dir=$bi_dir \
-        --loss=$loss \
-        --dataset_name=$dataset_name --data_path=$data_path --root_path=$root_path --dataset_type=$dataset_type \
-        --enc_in=$enc_in \
-        --e_layers=$e_layers \
-        --d_model=$d_model --d_ff=$d_ff --d_state=$d_state \
-        --learning_rate=1e-04 --dropout=0.1
-        # > $log_file 2>&1
-        # gpu=$(($gpu+1))
-        # if [ $gpu -eq 2 ]; then
-        #     gpu=0
-        # fi
-    done
-done
+    if [ $pred_len -eq 96 ]; then
+        lr="1.4e-3"
+        dropout=0.3
+    elif [ $pred_len -eq 192 ]; then
+        lr="1.4e-3"
+        dropout=0.3
+    elif [ $pred_len -eq 336 ]; then
+        lr="1e-3"
+        dropout=0.1
+    elif [ $pred_len -eq 720 ]; then
+        lr="1e-3"
+        dropout=0.2
+    fi
+    log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_dp${dropout}_el${e_layers}_em${embed_type}_r${residual}_b${bi_dir}.log"
+    python $work_space $model --is_training=$is_training --gpu=$gpu \
+    --embed_type=$embed_type --num_workers=4 --seed=$random_seed --batch_size=$batch_size --loss=$loss \
+    --seq_len=$seq_len --pred_len=$pred_len --enc_in=$enc_in \
+    --patch_len=$patch_len --stride=$stride --ch_ind=$ch_ind --residual=$residual --bi_dir=$bi_dir --SRA \
+    --dataset_name=$dataset_name --data_path=$data_path --root_path=$root_path --dataset_type=$dataset_type \
+    --e_layers=$e_layers \
+    --d_model=$d_model --d_ff=$d_ff --d_state=$d_state \
+    --learning_rate=$lr --dropout=$dropout \
+    > $log_file 2>&1
 done

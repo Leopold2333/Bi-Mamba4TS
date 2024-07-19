@@ -47,7 +47,7 @@ class LTF_Trainer():
         self.r_path = os.path.join(args.results, str(args.seed), task, setting)
         self.p_path = os.path.join(args.predictions, str(args.seed), task, args.model)
         self.device = torch.device(args.device)
-        if hasattr(args, 'use_gcn') and args.use_gcn:
+        if hasattr(args, 'SRA') and args.SRA:
             model = models_dict[self.args.model].Model(self.args, corr=corr).to(self.device)
         else:
             model = models_dict[self.args.model].Model(self.args).to(self.device)

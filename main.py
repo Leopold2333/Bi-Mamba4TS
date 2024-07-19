@@ -32,8 +32,8 @@ def objective(trial, args):
     torch.backends.cudnn.benchmark = False
 
     # parameters settings
-    args.learning_rate = trial.suggest_float("learning_rate", 0.0001, 0.0016, step=0.00007)
-    args.dropout = trial.suggest_float("dropout", 0.2, 0.4, step=0.05)
+    # args.learning_rate = trial.suggest_float("learning_rate", 0.0001, 0.0016, step=0.00007)
+    # args.dropout = trial.suggest_float("dropout", 0.2, 0.4, step=0.05)
     # args.d_conv = trial.suggest_int("d_conv", 1, 4,step=1)
     # args.d_state = trial.suggest_int("d_state", 1, 32, step=1)
 
@@ -117,21 +117,21 @@ if __name__ == '__main__':
         args.device='cpu'
 
     search_space = {
-        "weather": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5, 1e-3]},
-        "traffic": {"learning_rate": [2.4e-3, 1e-3, 1.4e-3, 2e-3]},
-        "electricity": {"learning_rate": [8e-4, 4e-4, 1e-3, 2e-4]},
-        "solar": {"learning_rate": [8e-4, 4e-4, 1e-3, 2e-3]},
-        "ETTh1": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
-        "ETTh2": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
-        "ETTm1": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
-        "ETTm2": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
+        # "weather": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5, 1e-3]},
+        # "traffic": {"learning_rate": [2.4e-3, 1e-3, 1.4e-3, 2e-3]},
+        # "electricity": {"learning_rate": [8e-4, 4e-4, 1e-3, 2e-4]},
+        # "solar": {"learning_rate": [8e-4, 4e-4, 1e-3, 2e-3]},
+        # "ETTh1": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
+        # "ETTh2": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
+        # "ETTm1": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
+        # "ETTm2": {"learning_rate": [4e-4, 1e-4, 2e-4, 4e-5], "dropout": [0.1, 0.2, 0.0]},
     }
 
-    # study = optuna.create_study(direction='minimize')
-    study = optuna.create_study(direction='minimize', sampler=optuna.samplers.GridSampler(search_space[args.dataset_name]))
+    study = optuna.create_study(direction='minimize')
+    # study = optuna.create_study(direction='minimize', sampler=optuna.samplers.GridSampler(search_space[args.dataset_name]))
     # bind 'args' to 'objective' function
     objective_with_args = lambda trial: objective(trial, args)
-    study.optimize(objective_with_args, n_trials=12)
+    study.optimize(objective_with_args, n_trials=1)
     # print the best parameters and metrics
     print('Best parameters:', study.best_params)
     print('Best score:', study.best_value)

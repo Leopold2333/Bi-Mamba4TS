@@ -90,9 +90,11 @@ After saving the new profile, run `bash` again and your SHELL will identify the 
 Of course, if you do not want to force local compilation, these paths are not necessary.
 
 2. Run the script: Find the model you want to run in `/scripts` and choose the dataset you want to use. 
-> Run `./scripts/{model}/{dataset}.sh` to start training.
+> Run `sh ./scripts/{model}/{dataset}.sh 1` to start training.
 
-> WARNING: we are now running new scripts to find the best results, the parameter settings are coming soon.
+> Run `sh ./scripts/{model}/{dataset}.sh 0` to start testing.
+
+> Run `sh ./scripts/{model}/{dataset}.sh -1` to start predicting.
 
 # Datasets🔗
 We have compiled the datasets we need to use and provide download link: [data.zip](https://drive.google.com/file/d/1krbMHQXB-aV9vvYs2bRsJnXPLa4BKxzG/view?usp=drive_link).

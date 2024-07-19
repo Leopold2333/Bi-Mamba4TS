@@ -1,12 +1,12 @@
-work_space="/home/Bi-Mamba4TS/main.py"
+project_path=$(pwd)
+work_space="$project_path/main.py"
 # model params
 model="BiMamba4TS"
 seq_len=96
 loss="mse"
-patch_len=24
-stride=12
+patch_len=12
+stride=6
 random_seed=2024
-
 e_layers=2
 
 d_model=128
@@ -17,7 +17,7 @@ batch_size=32
 # dataset
 dataset_name="solar"
 root_path=data/Solar
-data_path="solar_AL.txt"
+data_path="solar_AL.csv"
 dataset_type=custom
 enc_in=137
 
@@ -25,26 +25,36 @@ gpu=0
 ch_ind=0
 residual=1
 bi_dir=1
+embed_type=0
 
-for dropout in 0.1 0.2 0.0
+lr="1e-4"
+dropout=0.1
+
+is_training=$1
+
+for pred_len in 96 192 336 720
 do
-    for pred_len in 96 192 336 720
-    do
-            log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_dp${dropout}_el${e_layers}_e0_c${ch_ind}_r${residual}_b${bi_dir}.log"
-            python $work_space $model --gpu=$gpu \
-            --embed_type=0 --num_workers=4 --seed=$random_seed --batch_size=$batch_size \
-            --seq_len=$seq_len --pred_len=$pred_len \
-            --patch_len=$patch_len --stride=$stride --ch_ind=$ch_ind --residual=$residual --bi_dir=$bi_dir \
-            --loss=$loss \
-            --dataset_name=$dataset_name --data_path=$data_path --root_path=$root_path --dataset_type=$dataset_type \
-            --enc_in=$enc_in \
-            --e_layers=$e_layers \
-            --d_model=$d_model --d_ff=$d_ff --d_state=$d_state \
-            --learning_rate=1e-04 --dropout=$dropout \
-            > $log_file 2>&1
-            # gpu=$(($gpu+1))
-            # if [ $gpu -eq 2 ]; then
-            #     gpu=0
-            # fi
-    done    
+    if [ $pred_len -eq 96 ]; then
+        lr="4e-4"
+        dropout=0.1
+    elif [ $pred_len -eq 192 ]; then
+        lr="1e-3"
+        dropout=0.1
+    elif [ $pred_len -eq 336 ]; then
+        lr="2e-4"
+        dropout=0.2
+    elif [ $pred_len -eq 720 ]; then
+        lr="8e-4"
+        dropout=0.1
+    fi
+    log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_dp${dropout}_el${e_layers}_em${embed_type}_r${residual}_b${bi_dir}.log"
+    python $work_space $model --is_training=$is_training --gpu=$gpu \
+    --embed_type=$embed_type --num_workers=4 --seed=$random_seed --batch_size=$batch_size --loss=$loss \
+    --seq_len=$seq_len --pred_len=$pred_len --enc_in=$enc_in \
+    --patch_len=$patch_len --stride=$stride --ch_ind=$ch_ind --residual=$residual --bi_dir=$bi_dir --SRA \
+    --dataset_name=$dataset_name --data_path=$data_path --root_path=$root_path --dataset_type=$dataset_type \
+    --e_layers=$e_layers \
+    --d_model=$d_model --d_ff=$d_ff --d_state=$d_state \
+    --learning_rate=$lr --dropout=$dropout \
+    > $log_file 2>&1
 done
