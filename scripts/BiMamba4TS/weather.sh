@@ -35,19 +35,19 @@ is_training=$1
 for pred_len in 96 192 336 720
 do
     if [ $pred_len -eq 96 ]; then
-        lr="8e-4"
-        dropout=0.1
-    elif [ $pred_len -eq 192 ]; then
-        lr=""
-        dropout=
-    elif [ $pred_len -eq 336 ]; then
-        lr="8e-4"
+        lr="4e-4"
         dropout=0.0
+    elif [ $pred_len -eq 192 ]; then
+        lr="6e-4"
+        dropout=0.0
+    elif [ $pred_len -eq 336 ]; then
+        lr="6e-4"
+        dropout=0.1
     elif [ $pred_len -eq 720 ]; then
         lr="4e-4"
         dropout=0.0
     fi
-    log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_dp${dropout}_el${e_layers}_em${embed_type}_r${residual}_b${bi_dir}.log"
+    log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_el${e_layers}_em${embed_type}_c0_r${residual}_b${bi_dir}.log"
     python $work_space $model --is_training=$is_training --gpu=$gpu \
     --embed_type=$embed_type --num_workers=4 --seed=$random_seed --batch_size=$batch_size --loss=$loss \
     --seq_len=$seq_len --pred_len=$pred_len --enc_in=$enc_in \
