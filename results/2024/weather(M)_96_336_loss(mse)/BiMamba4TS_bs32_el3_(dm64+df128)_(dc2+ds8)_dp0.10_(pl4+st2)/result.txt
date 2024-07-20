@@ -1,0 +1,3 @@
+BiMamba4TS_bs32_el3_(dm64+df128)_(dc2+ds8)_dp0.10_(pl4+st2)
+mse:0.264145, mae:0.293359, rse:0.491824, mape:1394.360339 ==== lr=0.0006 seed=2024
+

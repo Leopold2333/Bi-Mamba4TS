@@ -1,7 +1,7 @@
 .vscode
 /data
-/checkpoints
-/results
+# /checkpoints
+# /results
 /results_old
 /logs
 /predictions

@@ -96,6 +96,8 @@ Of course, if you do not want to force local compilation, these paths are not ne
 
 > Run `sh ./scripts/{model}/{dataset}.sh -1` to start predicting.
 
+We provide the trained models in `checkpoints`, currently the Bi-Mamba+ for *Weather* is offered.
+
 # Datasets🔗
 We have compiled the datasets we need to use and provide download link: [data.zip](https://drive.google.com/file/d/1krbMHQXB-aV9vvYs2bRsJnXPLa4BKxzG/view?usp=drive_link).
 
