@@ -9,8 +9,8 @@ stride=24
 random_seed=2024
 e_layers=4
 
-d_model=128
-d_ff=256
+d_model=256
+d_ff=512
 d_state=32
 batch_size=32
 
@@ -35,17 +35,17 @@ is_training=$1
 for pred_len in 96 192 336 720
 do
     if [ $pred_len -eq 96 ]; then
-        lr="1.4e-3"
-        dropout=0.3
+        lr="4e-3"
+        dropout=0.2
     elif [ $pred_len -eq 192 ]; then
-        lr="1.4e-3"
+        lr="2e-3"
         dropout=0.3
     elif [ $pred_len -eq 336 ]; then
-        lr="1e-3"
-        dropout=0.1
+        lr="2e-3"
+        dropout=0.2
     elif [ $pred_len -eq 720 ]; then
         lr="1e-3"
-        dropout=0.2
+        dropout=0.1
     fi
     log_file="${random_seed}(${dataset_name})_${model}(${seq_len}-${pred_len})[${patch_len}]_dp${dropout}_el${e_layers}_em${embed_type}_r${residual}_b${bi_dir}.log"
     python $work_space $model --is_training=$is_training --gpu=$gpu \
