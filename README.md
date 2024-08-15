@@ -14,7 +14,7 @@
 
 🤠 Exploring the validity of Mamba in long-term time series forecasting (LTSF).
 
-🤠 Proposing a unified archetecture for channel-independent and channel-mixing tokenization strtegies based on a novel designed series-relation-aware (SRA) decider.
+🤠 Proposing a unified archetecture for channel-independent and channel-mixing tokenization strategies based on a novel designed series-relation-aware (SRA) decider.
 
 🤠 Proposing Mamba+, an improved Mamba block specifically designed for LTSF to preserve historical information in a longer range.
 
