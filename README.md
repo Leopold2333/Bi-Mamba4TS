@@ -2,13 +2,8 @@
 
 ![Python 3.10](https://img.shields.io/badge/python-3.10-green.svg?style=plastic)  ![PyTorch 2.1.1](https://img.shields.io/badge/Pytorch-2.1.1(+cu118)-da282a?style=plastic)  ![numpy 1.24.1](https://img.shields.io/badge/numpy-1.24.1-2ad82a?style=plastic)  ![pandas 2.0.3](https://img.shields.io/badge/pandas-2.0.3-39a8da?style=plastic)  ![optuna 3.6.1](https://img.shields.io/badge/optuna-3.6.1-a398da?style=plastic)  ![einops 0.7.0](https://img.shields.io/badge/einops-0.7.0-a938da?style=plastic)
 
-### This is the official implementation of [Bi-Mamba+: Bidirectional Mamba for Time Series Forecasting](https://arxiv.org/abs/2404.15772).
+### This is the official implementation of [Bi-Mamba+: Bidirectional Mamba for Time Series Forecasting].
 
-🚩**News**(June 27, 2024): We update our article [v3] on [arXiv](https://arxiv.org/abs/2404.15772). An additional experiment setting is added in Ablation study. The repo is made public now.
-
-🚩**News**(May 18, 2024): We update our article [v2] on [arXiv](https://arxiv.org/abs/2404.15772) and provide our [Source Code](https://github.com/Leopold2333/Bi-Mamba4TS) on Github. All experiments are rerun on a new machine and the results are updated. The repo is set private still.
-
-🚩**News**(April 26, 2024): We publish our article [v1] on [arXiv](https://arxiv.org/abs/2404.15772). The repo is currently private.
 
 # Key Designs of the proposed Bi-Mamba+🔑
 
@@ -108,12 +103,4 @@ We are grateful for the following awesome works when implementing Bi-Mamba+:
 
 [iTransformer](https://github.com/thuml/iTransformer)
 
-# Citation🙂
-```
-@article{liang2024bi,
-  title={Bi-Mamba+: Bidirectional Mamba for Time Series Forecasting},
-  author={Liang, Aobo and Jiang, Xingguo and Sun, Yan and Shi, Xiaohou and Li Ke},
-  journal={arXiv preprint arXiv:2404.15772},
-  year={2024}
-}
-```
+
