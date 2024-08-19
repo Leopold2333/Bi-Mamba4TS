@@ -93,8 +93,6 @@ Of course, if you do not want to force local compilation, these paths are not ne
 
 We provide the trained models in `checkpoints`, currently the Bi-Mamba+ for *Weather* is offered.
 
-# Datasets🔗
-We have compiled the datasets we need to use and provide download link: [data.zip](https://drive.google.com/file/d/1krbMHQXB-aV9vvYs2bRsJnXPLa4BKxzG/view?usp=drive_link).
 
 # Acknowledgements🙏
 We are grateful for the following awesome works when implementing Bi-Mamba+:
