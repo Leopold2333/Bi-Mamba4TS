@@ -2,23 +2,27 @@
 
 ![Python 3.10](https://img.shields.io/badge/python-3.10-green.svg?style=plastic)  ![PyTorch 2.1.1](https://img.shields.io/badge/Pytorch-2.1.1(+cu118)-da282a?style=plastic)  ![numpy 1.24.1](https://img.shields.io/badge/numpy-1.24.1-2ad82a?style=plastic)  ![pandas 2.0.3](https://img.shields.io/badge/pandas-2.0.3-39a8da?style=plastic)  ![optuna 3.6.1](https://img.shields.io/badge/optuna-3.6.1-a398da?style=plastic)  ![einops 0.7.0](https://img.shields.io/badge/einops-0.7.0-a938da?style=plastic)
 
-### This is the official implementation of [Bi-Mamba+: Bidirectional Mamba for Time Series Forecasting].
+### This is the official implementation of [Bi-Mamba+: Bidirectional Mamba for Time Series Forecasting](https://arxiv.org/abs/2404.15772).
+
+🚩**News**(June 27, 2024): We update our article [v3] on [arXiv](https://arxiv.org/abs/2404.15772). An additional experiment setting is added in Ablation study. The repo is made public now.
+🚩**News**(May 18, 2024): We update our article [v2] on [arXiv](https://arxiv.org/abs/2404.15772) and provide our [Source Code](https://github.com/Leopold2333/Bi-Mamba4TS) on Github. All experiments are rerun on a new machine and the results are updated. The repo is set private still.
+🚩**News**(April 26, 2024): We publish our article [v1] on [arXiv](https://arxiv.org/abs/2404.15772). The repo is currently private.
 
 
 # Key Designs of the proposed Bi-Mamba+🔑
 
-🤠 Exploring the validity of Mamba in long-term time series forecasting (LTSF).
+🤠 Exploring the validity of Mamba in multivariate long-term time series forecasting (MLTSF).
 
-🤠 Proposing a unified archetecture for channel-independent and channel-mixing tokenization strategies based on a novel designed series-relation-aware (SRA) decider.
+🤠 Proposing a unified architecture for channel-independent and channel-mixing tokenization strategies based on a novel designed series-relation-aware (SRA) decider.
 
 🤠 Proposing Mamba+, an improved Mamba block specifically designed for LTSF to preserve historical information in a longer range.
 
-🤠 Introducing a Bidirectional Mamba+ in a patching manner. The model can capture intra-series dependencies or inter-series dependencies in a finer granularity.
+🤠 Introducing a Bidirectional Mamba+ in a patching manner. The model captures intra-series dependencies or inter-series dependencies based on the variable correlation of specific datasets.
 
 
 ![Architecture of Bi-Mamba+](pics/architecture.png "Architecture of Bi-Mamba4TS")
 
-![Architecture of Bi-Mamba+ encoder](pics/bi-mamba-encoder.png "Architecture of Bi-Mamba4TS")
+<div style="text-align: center;"><img src="pics/bi-mamba-encoder.png" alt="Architecture of Bi-Mamba+ encoder" width="50%"></div>
 
 # Datasets
 
@@ -93,6 +97,8 @@ Of course, if you do not want to force local compilation, these paths are not ne
 
 We provide the trained models in `checkpoints`, currently the Bi-Mamba+ for *Weather* is offered.
 
+# Datasets🔗
+We have compiled the datasets we need to use and provide download link: [data.zip](https://drive.google.com/file/d/1krbMHQXB-aV9vvYs2bRsJnXPLa4BKxzG/view?usp=drive_link).
 
 # Acknowledgements🙏
 We are grateful for the following awesome works when implementing Bi-Mamba+:
@@ -101,3 +107,12 @@ We are grateful for the following awesome works when implementing Bi-Mamba+:
 
 [iTransformer](https://github.com/thuml/iTransformer)
 
+# Citation🙂
+```
+@article{liang2024bi,
+  title={Bi-Mamba+: Bidirectional Mamba for Time Series Forecasting},
+  author={Liang, Aobo and Jiang, Xingguo and Sun, Yan and Shi, Xiaohou and Li Ke},
+  journal={arXiv preprint arXiv:2404.15772},
+  year={2024}
+}
+```
