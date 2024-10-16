@@ -5,7 +5,9 @@
 ### This is the official implementation of [Bi-Mamba+: Bidirectional Mamba for Time Series Forecasting](https://arxiv.org/abs/2404.15772).
 
 🚩**News**(June 27, 2024): We update our article [v3] on [arXiv](https://arxiv.org/abs/2404.15772). An additional experiment setting is added in Ablation study. The repo is made public now.
+
 🚩**News**(May 18, 2024): We update our article [v2] on [arXiv](https://arxiv.org/abs/2404.15772) and provide our [Source Code](https://github.com/Leopold2333/Bi-Mamba4TS) on Github. All experiments are rerun on a new machine and the results are updated. The repo is set private still.
+
 🚩**News**(April 26, 2024): We publish our article [v1] on [arXiv](https://arxiv.org/abs/2404.15772). The repo is currently private.
 
 
