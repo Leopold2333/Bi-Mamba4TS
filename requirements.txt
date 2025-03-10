@@ -13,5 +13,5 @@ torch==2.1.1+cu118
 torchaudio==2.1.1+cu118
 torchvision==0.16.1+cu118
 tqdm==4.66.2
-transformers==4.39.2
+transformers==4.48.0
 triton==2.1.0
